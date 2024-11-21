@@ -2,7 +2,7 @@ import { Header } from "@/components/Product/Header";
 import { ProductCard } from "@/components/Product/ProductCard";
 import { SearchFilter } from "@/components/Product/SearchFillter";
 import SubHeader from "@/components/Product/SubHeader";
-
+export const dynamic = "force-dynamic";
 export default function ProductListingPage() {
   const products = [
     {

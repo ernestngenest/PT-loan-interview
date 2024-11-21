@@ -10,6 +10,7 @@ import {
 import dynamic from "next/dynamic";
 import BankApprovalChart from "./BankApprovalChart";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import { ApexOptions } from "apexcharts";
 
 export default function MainContent() {
   const metrics = [
@@ -19,9 +20,9 @@ export default function MainContent() {
     { title: "BANK", value: "30", icon: Bank, color: "text-blue-500" },
   ];
 
-  const chartOptions = {
+  const chartOptions: ApexOptions = {
     chart: {
-      type: "radialBar",
+      type: "radialBar" as const,
     },
     plotOptions: {
       radialBar: {
@@ -29,23 +30,21 @@ export default function MainContent() {
           size: "70%",
         },
         track: {
-          background: "#e7e7e7",
+          background: "#e5e7eb",
         },
         dataLabels: {
           name: {
             show: false,
           },
           value: {
-            fontSize: "30px",
+            fontSize: "24px",
             show: true,
-            formatter: function (val: number) {
-              return `${val}%`;
-            },
+            formatter: (val: number) => `${val}%`,
           },
         },
       },
     },
-    colors: ["#00B8D9"],
+    colors: ["#3b82f6"],
     stroke: {
       lineCap: "round",
     },

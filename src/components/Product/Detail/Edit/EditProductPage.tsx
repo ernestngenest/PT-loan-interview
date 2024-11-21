@@ -17,8 +17,55 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
+type NumericFields =
+  | "loanToValue"
+  | "penaltyFee"
+  | "interestRate"
+  | "fixRate"
+  | "fixRateYear"
+  | "maxTenor"
+  | "komisi"
+  | "appraisal"
+  | "floating";
+
+interface FormData {
+  bank: string;
+  productType: string;
+  promotional: boolean;
+  collateral: {
+    ruko: boolean;
+    rumah: boolean;
+    kendaraan: boolean;
+    slipGaji: boolean;
+    rukan: boolean;
+    apartemen: boolean;
+    sertifikat: boolean;
+  };
+  targetMarket: {
+    pengusaha: boolean;
+    profesional: boolean;
+    asn: boolean;
+    tni: boolean;
+    karyawan: boolean;
+    milenial: boolean;
+    polri: boolean;
+    lainnya: boolean;
+  };
+  loanToValue: number;
+  penaltyFee: number;
+  interestRate: number;
+  fixRate: number;
+  fixRateYear: number;
+  maxTenor: number;
+  komisi: number;
+  appraisal: number;
+  floating: number;
+  description: string;
+  url: string;
+}
+
 export default function EditProductPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     bank: "Mandiri",
     productType: "Kredit Pemilikan Rumah Secondary (KPR Secondary)",
     promotional: false,
@@ -55,19 +102,35 @@ export default function EditProductPage() {
     url: "null",
   });
 
-  const handleIncrement = (key: string, step: number = 1) => {
+  const handleIncrement = (key: NumericFields, step: number = 1) => {
     setFormData((prev) => ({
       ...prev,
       [key]: Number((prev[key] + step).toFixed(2)),
     }));
   };
 
-  const handleDecrement = (key: string, step: number = 1) => {
+  const handleDecrement = (key: NumericFields, step: number = 1) => {
     setFormData((prev) => ({
       ...prev,
       [key]: Number((prev[key] - step).toFixed(2)),
     }));
   };
+
+  const numericFields: Array<{
+    label: string;
+    key: NumericFields;
+    step: number;
+  }> = [
+    { label: "Loan to Value", key: "loanToValue", step: 0.01 },
+    { label: "Penalty Fee", key: "penaltyFee", step: 0.01 },
+    { label: "Interest Rate", key: "interestRate", step: 0.01 },
+    { label: "Fix Rate", key: "fixRate", step: 0.01 },
+    { label: "Fix Rate (Year)", key: "fixRateYear", step: 1 },
+    { label: "Max Tenor (Year)", key: "maxTenor", step: 1 },
+    { label: "Komisi", key: "komisi", step: 0.01 },
+    { label: "Appraisal", key: "appraisal", step: 0.01 },
+    { label: "Floating", key: "floating", step: 0.01 },
+  ];
 
   return (
     <div className="p-6">
@@ -125,7 +188,7 @@ export default function EditProductPage() {
             <div className="flex items-center mt-4">
               <Checkbox
                 checked={formData.promotional}
-                onCheckedChange={(checked) =>
+                onCheckedChange={(checked: boolean) =>
                   setFormData({ ...formData, promotional: checked })
                 }
                 id="promotional"
@@ -196,17 +259,7 @@ export default function EditProductPage() {
             </div>
           </div>
           <div>
-            {[
-              { label: "Loan to Value", key: "loanToValue", step: 0.01 },
-              { label: "Penalty Fee", key: "penaltyFee", step: 0.01 },
-              { label: "Interest Rate", key: "interestRate", step: 0.01 },
-              { label: "Fix Rate", key: "fixRate", step: 0.01 },
-              { label: "Fix Rate (Year)", key: "fixRateYear", step: 1 },
-              { label: "Max Tenor (Year)", key: "maxTenor", step: 1 },
-              { label: "Komisi", key: "komisi", step: 0.01 },
-              { label: "Appraisal", key: "appraisal", step: 0.01 },
-              { label: "Floating", key: "floating", step: 0.01 },
-            ].map((item) => (
+            {numericFields.map((item) => (
               <div key={item.key} className="flex items-center mt-4">
                 <Button
                   variant="outline"
@@ -217,7 +270,7 @@ export default function EditProductPage() {
                   -
                 </Button>
                 <Input
-                  type="text"
+                  type="number"
                   value={formData[item.key]}
                   onChange={(e) =>
                     setFormData({
